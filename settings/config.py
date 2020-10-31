@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     DEV: bool = True
 
     ER_URL: str
+    IM_URL: str
+    PARSER_URL: str
+    BACKEND_URL: str
 
     NLOGIC_LOGIN: str
     NLOGIC_PASSWORD: str
