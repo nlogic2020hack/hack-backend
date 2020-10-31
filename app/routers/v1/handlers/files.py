@@ -6,6 +6,15 @@ from app.database.models import Files, Pages
 router = APIRouter()
 
 
+DOCTYPES = {
+    'technical_passport': 'Технический паспорт',
+    'contract': 'Договор аренды',
+    'operation_start_permission': 'Разрешение на ввод в эксплуатацию',
+    'construction_permission': 'Разрешение на строительство',
+    'AGR_certificate': 'Свидетельство AГР'
+}
+
+
 def format_files(files):
     return [{
         'id': f.id,
@@ -13,7 +22,7 @@ def format_files(files):
         'date': f.created_at.strftime("%m-%d-%Y, %H:%M:%S"),
         'documents': [{
             'id': d.id,
-            'type': d.type,
+            'type': DOCTYPES.get(d.type, d.type),
         } for d in f.documents]
     } for f in files]
 
