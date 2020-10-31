@@ -11,7 +11,7 @@ from nlogic.logger import get_logger
 
 from settings.config import FILES_DIR, PAGES_DIR
 from app.database.models import Files, Pages, Documents
-from utils.api import er, process_pipeline, ask_image_manager, ask_parser
+from utils.api import process_pipeline
 
 
 router = APIRouter()
@@ -79,13 +79,6 @@ async def process(file: UploadFile = File(...)):
         bucket_data = process_pipeline(
             file_obj=file_obj
         )
-        # r = er.run_sync_pipeline(
-        #     pipeline='pravoru',
-        #     file_obj=file_obj,
-        #     timeout=600
-        # )
-
-        # bucket_data = r.json
         await save_pages_and_documents(
             pages_objets=pages,
             file_db=file_db,

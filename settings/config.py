@@ -13,12 +13,14 @@ FILES_DIR.mkdir(parents=True, exist_ok=True)
 PAGES_DIR = Path(BASE_DIR, 'pages')
 PAGES_DIR.mkdir(parents=True, exist_ok=True)
 
+PAGES_DIR = Path(BASE_DIR, 'pages')
+PAGES_DIR.mkdir(parents=True, exist_ok=True)
+
 
 class Settings(BaseSettings):
     DEBUG: bool = False
     DEV: bool = True
 
-    ER_URL: str
     IM_URL: str
     PARSER_URL: str
     BACKEND_URL: str

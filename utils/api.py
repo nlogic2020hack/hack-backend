@@ -1,9 +1,6 @@
 import requests
-from nlogic.services import EntityRecognition
 
 from settings.config import settings
-
-er = EntityRecognition(base_url='https://dev.er.nlogic.ai')
 
 
 def ask_image_manager(file_obj):
