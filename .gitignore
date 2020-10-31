@@ -159,3 +159,5 @@ tmp*.py
 *.jpg
 benchmark.py
 *.h5
+files/
+pages/
