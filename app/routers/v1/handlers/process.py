@@ -11,7 +11,7 @@ from nlogic.logger import get_logger
 
 from settings.config import FILES_DIR, PAGES_DIR
 from app.database.models import Files, Pages, Documents
-from utils.api import er
+from utils.api import er, process_pipeline, ask_image_manager, ask_parser
 
 
 router = APIRouter()
@@ -45,14 +45,14 @@ async def save_pages_and_documents(pages_objets: list, file_db, bucket_data):
         page_obj.save(page_path)
         numbers_to_pages_path[i] = page_path.as_posix()
 
-    for doc_id, doc_data in bucket_data['result']['documents'].items():
+    for doc_id, doc_data in bucket_data['documents'].items():
         doc_obj = await Documents.create(
             type=doc_data['type'],
             file=file_db
         )
 
         for page_id in doc_data['page_ids']:
-            page_data = bucket_data['result']['pages'].get(page_id)
+            page_data = bucket_data['pages'].get(page_id)
             im_data = bucket_data['image_manager'][page_id]
             page_num = im_data['page_num']
             pages_to_insert.append(Pages(
@@ -76,21 +76,24 @@ async def process(file: UploadFile = File(...)):
     try:
         pages = load_from_file(file_path)
 
-        r = er.run_sync_pipeline(
-            pipeline='pravoru',
-            file_obj=file_obj,
-            timeout=600
+        bucket_data = process_pipeline(
+            file_obj=file_obj
         )
+        # r = er.run_sync_pipeline(
+        #     pipeline='pravoru',
+        #     file_obj=file_obj,
+        #     timeout=600
+        # )
 
-        bucket_data = r.json
+        # bucket_data = r.json
         await save_pages_and_documents(
             pages_objets=pages,
             file_db=file_db,
-            bucket_data=r.json
+            bucket_data=bucket_data
         )
     except Exception as e:
-        logger.info(
-            msg='Request',
+        logger.error(
+            msg='ERROR',
             extra={
                 'error': str(e)
             }
